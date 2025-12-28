@@ -17,7 +17,7 @@ public class Night {
                 new RectangleRenderable(Color.BLACK));
         night.setCoordinateSpace(danogl.components.CoordinateSpace.CAMERA_COORDINATES);
         night.setTag("night");
-        new danogl.components.Transition<>(night,
+        new Transition<Float>(night,
                 night.renderer()::setOpaqueness,
                 NOON_OPACITY,
                 MIDNIGHT_OPACITY,

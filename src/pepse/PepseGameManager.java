@@ -11,6 +11,8 @@ import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import pepse.world.Terrain;
 import pepse.world.daynight.Night;
+import pepse.world.daynight.Sun;
+import pepse.world.daynight.SunHalo;
 
 /**
  * The main class of the Pepse game.
@@ -23,6 +25,7 @@ public class PepseGameManager extends GameManager {
     private static final int SEED = 73;
     private static final int CYCLE_OF_DAY_LENGTH = 10;
     private static final String TOP_LAYER_TAG = "topGroundBlock";
+    private static final int SUN_LAYER = -225;
 
     /**
      * Initializes the game by setting up the sky and terrain.
@@ -36,9 +39,20 @@ public class PepseGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener,
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+
         initializeSky(windowController);
         initializeTerrain(windowController);
         initializeNight(windowController);
+        initializeSun(windowController);
+
+    }
+
+    private void initializeSun(WindowController windowController) {
+        GameObject sun = Sun.create(windowController.getWindowDimensions(),
+                CYCLE_OF_DAY_LENGTH);
+        gameObjects().addGameObject(sun, SUN_LAYER);
+        gameObjects().addGameObject(SunHalo.create(sun), SUN_LAYER);
+
     }
 
     private void initializeNight(WindowController windowController) {
