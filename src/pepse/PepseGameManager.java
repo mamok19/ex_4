@@ -10,6 +10,7 @@ import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import pepse.world.Terrain;
+import pepse.world.daynight.Moon;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
@@ -44,7 +45,14 @@ public class PepseGameManager extends GameManager {
         initializeTerrain(windowController);
         initializeNight(windowController);
         initializeSun(windowController);
+        initializeMoon(windowController);
 
+    }
+
+    private void initializeMoon(WindowController windowController) {
+        GameObject moon = Moon.create(windowController.getWindowDimensions(),
+                CYCLE_OF_DAY_LENGTH);
+        gameObjects().addGameObject(moon, SUN_LAYER);
     }
 
     private void initializeSun(WindowController windowController) {
