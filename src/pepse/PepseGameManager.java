@@ -1,6 +1,8 @@
 package pepse;
 import danogl.GameObject;
 import danogl.collisions.Layer;
+import danogl.gui.rendering.Camera;
+import danogl.util.Vector2;
 import pepse.world.Block;
 import pepse.world.Sky;
 
@@ -10,6 +12,7 @@ import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import pepse.world.Terrain;
+import pepse.world.avatar.Avatar;
 import pepse.world.daynight.Moon;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
@@ -27,6 +30,8 @@ public class PepseGameManager extends GameManager {
     private static final int CYCLE_OF_DAY_LENGTH = 10;
     private static final String TOP_LAYER_TAG = "topGroundBlock";
     private static final int SUN_LAYER = -225;
+    private static final float FIRST_X_POSITION = 0f;
+    private float groundHeightAtX0;
 
     /**
      * Initializes the game by setting up the sky and terrain.
@@ -40,12 +45,25 @@ public class PepseGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener,
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-
+        gameObjects().layers().shouldLayersCollide(Layer.FOREGROUND,Layer.STATIC_OBJECTS,true);
         initializeSky(windowController);
         initializeTerrain(windowController);
+        this.groundHeightAtX0 = Terrain.groundHeightAtX0(windowController.getWindowDimensions());
         initializeNight(windowController);
         initializeSun(windowController);
         initializeMoon(windowController);
+
+
+        initalizeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader, windowController);
+
+    }
+
+    private void initalizeAvatar(Vector2 topBlockAtX0, UserInputListener inputListener,ImageReader imageReader,
+                                 WindowController windowController) {
+        GameObject avatar = new Avatar(topBlockAtX0, inputListener, imageReader);
+        gameObjects().addGameObject(avatar, Layer.FOREGROUND);
+        setCamera(new Camera(avatar, Vector2.ZERO,
+                windowController.getWindowDimensions(), windowController.getWindowDimensions()));
 
     }
 

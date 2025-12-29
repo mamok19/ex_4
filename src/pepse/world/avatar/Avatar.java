@@ -16,6 +16,8 @@ public class Avatar extends GameObject {
     private static final float GRAVITY = 1000f;
     private static final String AVATAR_TAG = "avatar";
     private static final float WALK_SPEED = 300f;
+    private static final float JUMP_SPEED = 600f;
+
 
 
 
@@ -23,6 +25,7 @@ public class Avatar extends GameObject {
     private final Vector2 topleftCorner;
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
+    private boolean isJumping;
 
 
     public Avatar(Vector2 topLeftCorner,
@@ -33,7 +36,7 @@ public class Avatar extends GameObject {
         this.topleftCorner = topLeftCorner;
         this.inputListener = inputListener;
         this.imageReader = imageReader;
-
+        this.isJumping = false;
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         
@@ -44,7 +47,16 @@ public class Avatar extends GameObject {
     public void update(float deltaTime) {
         super.update(deltaTime);
         left_right_movment_handler();
+        jump_movment_handler();
 
+    }
+
+    private void jump_movment_handler() {
+        if (inputListener.isKeyPressed(KeyEvent.VK_SPACE)) {
+            if (transform().getVelocity().y() >= 0) {
+                transform().setVelocityY(-JUMP_SPEED);
+            }
+        }
     }
 
     private void left_right_movment_handler() {

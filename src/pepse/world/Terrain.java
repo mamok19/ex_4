@@ -56,6 +56,9 @@ public class Terrain {
         return blocks;
     }
 
+    public static float groundHeightAtX0(Vector2 windowDimensions) {
+        return GROUND_HEIGHT_FACTOR * windowDimensions.y();
+    }
 
     public static float getGroundHeightFactor() {
         return GROUND_HEIGHT_FACTOR;
