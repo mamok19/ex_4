@@ -19,4 +19,6 @@ public class Constants {
     public static final String TOP_LAYER_GROUND_BLOCK_TAG = "topGroundBlock";
     public static final String LOWER_LAYER_GROUND_BLOCK_TAG = "lowerGroundBlock";
     public static final float GROUND_HEIGHT_FACTOR = (2/3.0f);
+    public static final int MAX_ENERGY = 100;
+
 }

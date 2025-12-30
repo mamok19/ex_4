@@ -4,6 +4,7 @@ import danogl.collisions.Layer;
 import danogl.gui.rendering.Camera;
 import danogl.util.Vector2;
 import pepse.world.Block;
+import pepse.world.EnergyDisplay;
 import pepse.world.Sky;
 
 import danogl.GameManager;
@@ -32,6 +33,7 @@ public class PepseGameManager extends GameManager {
     private static final int SUN_LAYER = -225;
     private static final float FIRST_X_POSITION = 0f;
     private float groundHeightAtX0;
+    private Avatar avatar; // todo check if it is ok that i hold the avatar object here
 
     /**
      * Initializes the game by setting up the sky and terrain.
@@ -55,12 +57,20 @@ public class PepseGameManager extends GameManager {
 
 
         initalizeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader, windowController);
+        inializeEnergyDisplay(windowController);
 
+    }
+
+    private void inializeEnergyDisplay(WindowController windowController) {
+        new EnergyDisplay(
+                avatar::getEnergyMeter,
+                (gameObject, layer) -> gameObjects().addGameObject(gameObject, layer)
+        );
     }
 
     private void initalizeAvatar(Vector2 topBlockAtX0, UserInputListener inputListener,ImageReader imageReader,
                                  WindowController windowController) {
-        GameObject avatar = new Avatar(topBlockAtX0, inputListener, imageReader);
+        this.avatar = new Avatar(topBlockAtX0, inputListener, imageReader);
         gameObjects().addGameObject(avatar, Layer.FOREGROUND);
         setCamera(new Camera(avatar, Vector2.ZERO,
                 windowController.getWindowDimensions(), windowController.getWindowDimensions()));
