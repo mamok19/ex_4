@@ -19,4 +19,5 @@ public class Block extends GameObject {
     public int getSize() {
         return BLOCK_SIZE;
     }
+
 }
