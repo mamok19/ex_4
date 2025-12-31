@@ -16,5 +16,18 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/DanoGameLab 1.1.0 17.10.23" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/DanoGameLab 1.1.0 17.10.23/CodeExamples" />
+          <root url="file://$MODULE_DIR$/DanoGameLab 1.1.0 17.10.23/src" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/DanoGameLab 1.1.0 17.10.23" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
