@@ -45,6 +45,6 @@ public class Fruit extends Block {
     private void reappear() {
         this.isCollected = false;
         renderer().setRenderable(FRUIT_RENDERABLE);
-        this.setDimensions(Vector2.ONES.mult(this.getSize()));
+        this.setDimensions(Vector2.ONES.mult(Block.getSize()));
     }
 }

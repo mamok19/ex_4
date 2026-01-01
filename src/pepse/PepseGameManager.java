@@ -21,6 +21,9 @@ import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Fruit;
 import pepse.world.trees.Leaf;
+import pepse.world.trees.Tree;
+
+import java.util.List;
 
 /**
  * The main class of the Pepse game.
@@ -65,6 +68,22 @@ public class PepseGameManager extends GameManager {
         Leaf leaf = new Leaf(new Vector2(300, 300));
         gameObjects().addGameObject(leaf, Layer.FOREGROUND);
         leaf.createWindEffect(0f);
+        Tree tree = new Tree(new Vector2(150,
+                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
+        List<Block> trunkBlocks = tree.getTrunkBlocks();
+        for (Block block : trunkBlocks) {
+            gameObjects().addGameObject(block, Layer.FOREGROUND + 1);
+        }
+        List<Leaf> leaves = tree.getAllLeaves();
+        for (Leaf l : leaves) {
+            gameObjects().addGameObject(l, Layer.FOREGROUND + 1);
+            l.createWindEffect(0f);
+        }
+        List<Fruit> fruits = tree.getAllFruit();
+        for (Fruit f : fruits) {
+            gameObjects().addGameObject(f, FRUIT_LAYER);
+        }
+//        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
         // end of testing
 
         initializeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader,
@@ -88,14 +107,6 @@ public class PepseGameManager extends GameManager {
         setCamera(new Camera(avatar, Vector2.ZERO,
                 windowController.getWindowDimensions(), windowController.getWindowDimensions()));
     }
-
-//    private void temporarilyRemoveFruit(Fruit fruit, Object other){
-//        gameObjects().removeGameObject(fruit);
-//        new ScheduledTask(fruit,
-//                Constants.CYCLE_LENGTH,
-//                false,
-//                () -> gameObjects().addGameObject(fruit, Layer.FOREGROUND));
-//    }
 
     private void initializeMoon(WindowController windowController) {
         GameObject moon = Moon.create(windowController.getWindowDimensions(),

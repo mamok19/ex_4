@@ -4,6 +4,7 @@ import danogl.components.ScheduledTask;
 import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
+import pepse.Constants;
 import pepse.utils.ColorSupplier;
 import pepse.world.Block;
 
@@ -16,7 +17,6 @@ import java.awt.*;
  */
 public class Leaf extends Block {
     private static final Color BASE_LEAF_COLOR = new Color(50, 200, 30);;
-    private static final String LEAF_TAG = "leaf";
     private static final float LEAF_CHANGE_TIME = 2.0f;
     private static final float LEAF_ANGLE_DIFF = 20.0f;
     private static final float LEAF_SIZE_FACTOR = 2.0f;
@@ -27,7 +27,7 @@ public class Leaf extends Block {
      */
     public Leaf(Vector2 TopLeftCorner) {
         super(TopLeftCorner, new RectangleRenderable(ColorSupplier.approximateColor(BASE_LEAF_COLOR)));
-        this.setTag(LEAF_TAG);
+        this.setTag(Constants.LEAF_TAG);
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
     }
 
@@ -56,9 +56,9 @@ public class Leaf extends Block {
     }
 
     private void changeLeafDimensions() {
-        Vector2 startSize = new Vector2(this.getSize(), this.getSize());
+        Vector2 startSize = new Vector2(Block.getSize(), Block.getSize());
         Vector2 endSize = startSize.subtract(
-                new Vector2((float) this.getSize()/LEAF_SIZE_FACTOR,
+                new Vector2((float) Block.getSize()/LEAF_SIZE_FACTOR,
                 0));
         new Transition<>(this,
                 this::setDimensions,

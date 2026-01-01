@@ -17,7 +17,7 @@ public class Block extends GameObject {
         physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }
 
-    public int getSize() {
+    public static int getSize() {
         return BLOCK_SIZE;
     }
 

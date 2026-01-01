@@ -30,5 +30,9 @@ public class Constants {
     //Avatar
     public static final String AVATAR_TAG = "avatar";
 
+    //Tree
+    public static final String TRUNK_BLOCK_TAG = "trunk_block";
 
+
+    public static final String LEAF_TAG = "leaf";
 }
