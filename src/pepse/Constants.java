@@ -32,6 +32,7 @@ public class Constants {
 
     //Tree
     public static final String TRUNK_BLOCK_TAG = "trunk_block";
+    public static final float WIND_EFFECT_DIFFERENCES = 2.0f;
 
 
     public static final String LEAF_TAG = "leaf";

@@ -63,11 +63,11 @@ public class PepseGameManager extends GameManager {
         initializeSun(windowController);
         initializeMoon(windowController);
         //testing - will be removed
-        Fruit fruit = new Fruit(new Vector2(200, 200));;
-        gameObjects().addGameObject(fruit, FRUIT_LAYER);
-        Leaf leaf = new Leaf(new Vector2(300, 300));
-        gameObjects().addGameObject(leaf, Layer.FOREGROUND);
-        leaf.createWindEffect(0f);
+//        Fruit fruit = new Fruit(new Vector2(200, 200));;
+//        gameObjects().addGameObject(fruit, FRUIT_LAYER);
+//        Leaf leaf = new Leaf(new Vector2(300, 300));
+//        gameObjects().addGameObject(leaf, Layer.FOREGROUND);
+//        leaf.createWindEffect(0f);
         Tree tree = new Tree(new Vector2(150,
                 Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
         List<Block> trunkBlocks = tree.getTrunkBlocks();
@@ -76,8 +76,7 @@ public class PepseGameManager extends GameManager {
         }
         List<Leaf> leaves = tree.getAllLeaves();
         for (Leaf l : leaves) {
-            gameObjects().addGameObject(l, Layer.FOREGROUND + 1);
-            l.createWindEffect(0f);
+            gameObjects().addGameObject(l, Layer.FOREGROUND);
         }
         List<Fruit> fruits = tree.getAllFruit();
         for (Fruit f : fruits) {

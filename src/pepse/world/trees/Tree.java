@@ -21,9 +21,9 @@ public class Tree {
     public static final Color BASE_TRUNK_COLOR = new Color(139, 69, 19);
     private static final Renderable TRUNK_RENDERABLE =
             new RectangleRenderable(ColorSupplier.approximateColor(BASE_TRUNK_COLOR));
-    private static final int TREE_TOP_SIZE = 6;
-    private static final double LEAF_CHANCE = 0.7;
-    private static final double FRUIT_CHANCE = 0.1;
+    private static final int TREE_TOP_RADIUS = 3;
+    private static final double LEAF_CHANCE = 0.4;
+    private static final double FRUIT_CHANCE = 0.2;
     private final Random random;
     private final int trunkHeight;
     private final List<Block> TrunkBlocks = new ArrayList<>();
@@ -40,7 +40,15 @@ public class Tree {
         this.random = new Random(Objects.hash(bottomLeftCorner.x(), seed));
         this.trunkHeight = MIN_TREE_HEIGHT + (random.nextInt(MAX_TREE_HEIGHT_ADDITION));
         createTreeTrunk(bottomLeftCorner);
-        createLeavesAndFruit();;
+        createTreeTop();
+        createWindEffectForLeaves();
+    }
+
+    private void createWindEffectForLeaves() {
+        for (Leaf leaf : allLeaves) {
+            float timeToStart = random.nextFloat() * Constants.WIND_EFFECT_DIFFERENCES;
+            leaf.createWindEffect(timeToStart);
+        }
     }
 
     private void createTreeTrunk(Vector2 bottomLeftCorner) {
@@ -63,28 +71,36 @@ public class Tree {
         return TrunkBlocks;
     }
 
+    private void createTreeTop(){
+        Vector2 treeTopCenter = new Vector2(
+                TrunkBlocks.getFirst().getTopLeftCorner().x() + Block.getSize(),
+                TrunkBlocks.getLast().getTopLeftCorner().y() - (float) this.trunkHeight * Block.getSize()/2
+        );
+        for (int i = -TREE_TOP_RADIUS; i <= TREE_TOP_RADIUS; i++) {
+            for (int j = -TREE_TOP_RADIUS; j <= TREE_TOP_RADIUS; j++) {
+                double distance = Math.sqrt(i * i + j * j);
+                if (distance > TREE_TOP_RADIUS) {
+                    continue;
+                }
+                Vector2 particleTopLeftCorner = treeTopCenter.add(
+                        new Vector2(i * Block.getSize(), j * Block.getSize())//todo check whether it's ok
+                        // to have Block mentioned here or whether we should have a constant instead
+                );
+                double curRandom = random.nextDouble();
 
-    private void createLeavesAndFruit() {
-        Vector2 treeTopParticleTopLeftCorner = new Vector2(
-                TrunkBlocks.getFirst().getTopLeftCorner().x() -
-                        ((float) (TREE_TOP_SIZE * Block.getSize()) / 2),
-                TrunkBlocks.getLast().getTopLeftCorner().y());
-        for (int i = 0; i < TREE_TOP_SIZE; i++) {
-            for(int j = 0; j < TREE_TOP_SIZE; j++) {
-                if (random.nextDouble() < LEAF_CHANCE){
-                    Leaf leaf = new Leaf(treeTopParticleTopLeftCorner);
+                if (curRandom < LEAF_CHANCE) {
+                    Leaf leaf = new Leaf(particleTopLeftCorner);
                     leaf.setTag(Constants.LEAF_TAG);
                     allLeaves.add(leaf);
                 }
-                if (random.nextDouble() >= LEAF_CHANCE && random.nextDouble() < LEAF_CHANCE + FRUIT_CHANCE){
-                    Fruit fruit = new Fruit(treeTopParticleTopLeftCorner);
+                else if (curRandom < LEAF_CHANCE + FRUIT_CHANCE) {
+                    Fruit fruit = new Fruit(particleTopLeftCorner);
                     fruit.setTag(Constants.FRUIT_TAG);
                     allFruit.add(fruit);
                 }
-                treeTopParticleTopLeftCorner = treeTopParticleTopLeftCorner.subtract(
-                        new Vector2(i * Block.getSize(), j * Block.getSize()));
             }
         }
+
     }
 
     /**
