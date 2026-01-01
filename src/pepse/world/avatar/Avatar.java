@@ -6,6 +6,7 @@ import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.util.Vector2;
 import danogl.gui.rendering.AnimationRenderable;
+import pepse.Constants;
 
 import java.awt.event.KeyEvent;
 
@@ -18,7 +19,6 @@ public class Avatar extends GameObject {
     private static final Vector2 AVATAR_SIZE = new Vector2(50, 50);
     private static final float OFFSET_GROUND_START = 20f;
     private static final float GRAVITY = 1000f;
-    private static final String AVATAR_TAG = "avatar";
     private static final float WALK_SPEED = 300f;
     private static final float JUMP_SPEED = 600f;
     private static final int LEFT_RIGHT_MOVEMENT_COST = 2;
@@ -40,8 +40,6 @@ public class Avatar extends GameObject {
         WALKING,
         JUMPING
     }
-
-
 
     private boolean onGround;
     private boolean doubleJumpUsed;
@@ -81,7 +79,7 @@ public class Avatar extends GameObject {
 
         renderer().setRenderable(idleAnimation);
 
-        setTag(AVATAR_TAG);
+        setTag(Constants.AVATAR_TAG);
     }
 
     @Override

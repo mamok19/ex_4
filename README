@@ -1,0 +1,4 @@
+Might need to explain here:
+fruit - handles its own collectable behavior by temporarily rendering null and changing its dimensions to
+Vector2.ZERO when collected, then restoring them after a game cycle duration.
+

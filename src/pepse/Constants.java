@@ -3,6 +3,9 @@ package pepse;
 import java.awt.*;
 
 public class Constants {
+    //Game
+    public static final float CYCLE_LENGTH = 30.0f;
+
     //sky
     public static final Color BASIC_SKY_COLOR = Color.decode("#80C6E5");
     public static  final String SKY_TAG = "sky";
@@ -20,5 +23,12 @@ public class Constants {
     public static final String LOWER_LAYER_GROUND_BLOCK_TAG = "lowerGroundBlock";
     public static final float GROUND_HEIGHT_FACTOR = (2/3.0f);
     public static final int MAX_ENERGY = 100;
+
+    //Fruit
+    public static final String FRUIT_TAG = "fruit";
+
+    //Avatar
+    public static final String AVATAR_TAG = "avatar";
+
 
 }
