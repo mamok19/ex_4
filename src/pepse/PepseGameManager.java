@@ -74,10 +74,11 @@ public class PepseGameManager extends GameManager {
         terrain = new Terrain(windowController.getWindowDimensions(), SEED);
         flora = new Flora(SEED, terrain::groundHeightAt);
 
-        // sliding-window width: keep it simple, same as your friend's approach
-        zoneWidth = windowController.getWindowDimensions().x();
 
-        initializeTerrain(windowController);
+
+
+
+//        initializeTerrain(windowController);
         this.groundHeightAtX0 = Terrain.groundHeightAtX0(windowController.getWindowDimensions());
         initializeNight(windowController);
         initializeSun(windowController);
@@ -88,7 +89,13 @@ public class PepseGameManager extends GameManager {
         initializeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader,
                 windowController);
         initializeEnergyDisplay(windowController);
-        initializeTrees(windowController);
+//        initializeTrees(windowController);
+        // sliding-window width: keep it simple, same as your friend's approach
+        zoneWidth = windowController.getWindowDimensions().x();
+        currentZoneIdx = worldXToZone(avatar.getCenter().x());
+        loadZone(currentZoneIdx - 1);
+        loadZone(currentZoneIdx);
+        loadZone(currentZoneIdx + 1);
 
         //testing - will be removed
 //        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 73);
@@ -117,8 +124,80 @@ public class PepseGameManager extends GameManager {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        System.out.println("zone=" + worldXToZone(avatar.getCenter().x()));
+
+        int newZone = worldXToZone(avatar.getCenter().x());
+        if (newZone == currentZoneIdx) return;
+
+        if (newZone > currentZoneIdx) {
+            // moved right: drop leftmost, add new rightmost
+            unloadZone(currentZoneIdx - 1);
+            loadZone(newZone + 1);
+        } else {
+            // moved left: drop rightmost, add new leftmost
+            unloadZone(currentZoneIdx + 1);
+            loadZone(newZone - 1);
+        }
+
+        currentZoneIdx = newZone;
+        System.out.println("loadedZones=" + loadedZones.keySet());
+
     }
+
+
+    private void loadZone(int zoneIdx) {
+        if (loadedZones.containsKey(zoneIdx)) return;
+
+        int start = zoneStartX(zoneIdx);
+        int end = zoneEndX(zoneIdx);
+
+        java.util.List<ObjInLayer> created = new java.util.ArrayList<>();
+
+        // 1) Terrain
+        for (Block block : terrain.createInRange(start, end)) {
+            int layer = TOP_LAYER_TAG.equals(block.getTag())
+                    ? Layer.STATIC_OBJECTS
+                    : Layer.BACKGROUND;
+            gameObjects().addGameObject(block, layer);
+            created.add(new ObjInLayer(block, layer));
+        }
+
+        // 2) Trees + leaves + fruits
+        // This assumes your Flora.createInRange is deterministic for a given SEED and x-range.
+        List<Tree> trees = flora.createInRange(start, end);
+        for (Tree tree : trees) {
+            for (Block trunk : tree.getTrunkBlocks()) {
+                int layer = Layer.FOREGROUND + 1; // you used this for trunk previously
+                gameObjects().addGameObject(trunk, layer);
+                created.add(new ObjInLayer(trunk, layer));
+            }
+            for (Leaf leaf : tree.getAllLeaves()) {
+                int layer = Layer.FOREGROUND;
+                gameObjects().addGameObject(leaf, layer);
+                created.add(new ObjInLayer(leaf, layer));
+            }
+            for (Fruit fruit : tree.getAllFruit()) {
+                int layer = FRUIT_LAYER;
+                gameObjects().addGameObject(fruit, layer);
+                created.add(new ObjInLayer(fruit, layer));
+            }
+
+            // If swayLeaves() schedules tasks/transitions, it is fine as long as leaves are removed later.
+//            tree.swayLeaves();
+        }
+
+        loadedZones.put(zoneIdx, created);
+    }
+
+    private void unloadZone(int zoneIdx) {
+        java.util.List<ObjInLayer> objs = loadedZones.get(zoneIdx);
+        if (objs == null) return;
+
+        for (ObjInLayer ref : objs) {
+            gameObjects().removeGameObject(ref.obj, ref.layer);
+        }
+        loadedZones.remove(zoneIdx);
+    }
+
 
     private void initializeTrees(WindowController windowController) {
 //        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
@@ -140,6 +219,7 @@ public class PepseGameManager extends GameManager {
 
         }
     }
+
 
     private void initializeEnergyDisplay(WindowController windowController) {
         new EnergyDisplay(
@@ -196,8 +276,7 @@ public class PepseGameManager extends GameManager {
     }
 
     private int worldXToZone(float worldX) {
-        // zone index for sliding windows of width zoneWidth
-        return (int) Math.floor(worldX / zoneWidth);
+        return Math.floorDiv((int)Math.floor(worldX), (int)zoneWidth);
     }
 
     private int zoneStartX(int zoneIdx) {

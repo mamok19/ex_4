@@ -17,7 +17,7 @@ public class Tree {
 
     private static final int MIN_TREE_HEIGHT = 4;
     private static final int MAX_TREE_HEIGHT_ADDITION = 4;
-    private static final int TREE_WIDTH = 2;
+    private static final int TREE_WIDTH = 1;
     public static final Color BASE_TRUNK_COLOR = new Color(139, 69, 19);
     private static final Renderable TRUNK_RENDERABLE =
             new RectangleRenderable(ColorSupplier.approximateColor(BASE_TRUNK_COLOR));
