@@ -23,7 +23,7 @@ public class Tree {
             new RectangleRenderable(ColorSupplier.approximateColor(BASE_TRUNK_COLOR));
     private static final int TREE_TOP_RADIUS = 3;
     private static final double LEAF_CHANCE = 0.4;
-    private static final double FRUIT_CHANCE = 0.2;
+    private static final double FRUIT_CHANCE = 0.08;
     private final Random random;
     private final int trunkHeight;
     private final List<Block> TrunkBlocks = new ArrayList<>();

@@ -39,6 +39,7 @@ public class Fruit extends Block {
                     Constants.CYCLE_LENGTH,
                     false,
                     this::reappear);
+            //todo add 10 points of energy to avatar
         }
     }
 

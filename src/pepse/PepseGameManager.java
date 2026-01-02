@@ -19,6 +19,7 @@ import pepse.world.daynight.Moon;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
+import pepse.world.trees.Flora;
 import pepse.world.trees.Fruit;
 import pepse.world.trees.Leaf;
 import pepse.world.trees.Tree;
@@ -63,25 +64,27 @@ public class PepseGameManager extends GameManager {
         initializeSun(windowController);
         initializeMoon(windowController);
         //testing - will be removed
-//        Fruit fruit = new Fruit(new Vector2(200, 200));;
-//        gameObjects().addGameObject(fruit, FRUIT_LAYER);
-//        Leaf leaf = new Leaf(new Vector2(300, 300));
-//        gameObjects().addGameObject(leaf, Layer.FOREGROUND);
-//        leaf.createWindEffect(0f);
-        Tree tree = new Tree(new Vector2(150,
-                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
-        List<Block> trunkBlocks = tree.getTrunkBlocks();
-        for (Block block : trunkBlocks) {
-            gameObjects().addGameObject(block, Layer.FOREGROUND + 1);
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 73);
+        Flora flora = new Flora(73, terrain::groundHeightAt);
+        List<Tree> trees = flora.createInRange(0, 1200);
+        for (Tree tree : trees) {
+            List<Block> trunkBlocks = tree.getTrunkBlocks();
+            for (Block block : trunkBlocks) {
+                gameObjects().addGameObject(block, Layer.FOREGROUND + 1);
+            }
+            List<Leaf> leaves = tree.getAllLeaves();
+            for (Leaf l : leaves) {
+                gameObjects().addGameObject(l, Layer.FOREGROUND);
+            }
+            List<Fruit> fruits = tree.getAllFruit();
+            for (Fruit f : fruits) {
+                gameObjects().addGameObject(f, FRUIT_LAYER);
+            }
+
         }
-        List<Leaf> leaves = tree.getAllLeaves();
-        for (Leaf l : leaves) {
-            gameObjects().addGameObject(l, Layer.FOREGROUND);
-        }
-        List<Fruit> fruits = tree.getAllFruit();
-        for (Fruit f : fruits) {
-            gameObjects().addGameObject(f, FRUIT_LAYER);
-        }
+
+//        Tree tree = new Tree(new Vector2(150,
+//                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
 //        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
         // end of testing
 
