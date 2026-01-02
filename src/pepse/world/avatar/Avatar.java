@@ -10,8 +10,7 @@ import pepse.Constants;
 
 import java.awt.event.KeyEvent;
 
-import static pepse.Constants.MAX_ENERGY;
-import static pepse.Constants.TOP_LAYER_GROUND_BLOCK_TAG;
+import static pepse.Constants.*;
 
 
 public class Avatar extends GameObject {
@@ -26,6 +25,7 @@ public class Avatar extends GameObject {
     private static final int DOUBLE_JUMP_COST = 50;
     private static final float ENERGY_RETURN_RATE = 1f; //todo write on readme that i change movement cost
     private static final int ENERGY_RETURN_AMOUNT = 1;
+    private static final int FRUIT_ENERGY_VALUE = 10;
     private static final String[] IDLE_IMAGES = new String[]
     {"assets/idle_0.png","assets/idle_1.png","assets/idle_2.png","assets/idle_3.png"};
     private static final String[] WALKING_IMAGES = new String[]
@@ -195,15 +195,17 @@ public class Avatar extends GameObject {
             doubleJumpUsed = false;
             transform().setVelocityY(0);
         }
+//        if (other.getTag() == FRUIT_TAG) {
+//            energyMeter = Math.min(energyMeter + FRUIT_ENERGY_VALUE, MAX_ENERGY);
+//        }
 
+    }
+    public void addEnergy(int energyToAdd) {
+        this.energyMeter = Math.min(this.energyMeter + energyToAdd, MAX_ENERGY);
     }
 
     public int getEnergyMeter() {
         return energyMeter;
-    }
-
-    public void addEnergy(int energyToAdd) {
-        this.energyMeter = Math.min(this.energyMeter + energyToAdd, MAX_ENERGY);
     }
 
 }

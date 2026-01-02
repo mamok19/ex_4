@@ -23,6 +23,7 @@ public class Constants {
     public static final String LOWER_LAYER_GROUND_BLOCK_TAG = "lowerGroundBlock";
     public static final float GROUND_HEIGHT_FACTOR = (2/3.0f);
     public static final int MAX_ENERGY = 100;
+//    public static final String FRUIT_TAG = "fruit";
 
     //Fruit
     public static final String FRUIT_TAG = "fruit";
@@ -36,4 +37,5 @@ public class Constants {
 
 
     public static final String LEAF_TAG = "leaf";
+    public static final int FRUIT_ENERGY = 10;
 }

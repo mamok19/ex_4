@@ -26,12 +26,23 @@ import pepse.world.trees.Tree;
 
 import java.util.List;
 
+import static pepse.Constants.BLOCK_SIZE;
+
 /**
  * The main class of the Pepse game.
  * incharge of initializing and running the game.
  * @author Eilam Soroka, Maayan Felig
  */
 public class PepseGameManager extends GameManager {
+
+    private static final int CHUNK_BLOCKS = 40;
+    private static final int CHUNK_WIDTH = CHUNK_BLOCKS * BLOCK_SIZE;
+    private static final int CHUNK_RADIUS = 2;
+
+    // Loaded chunks only: chunkIndex -> objects currently in the world (so we can remove them)
+    private final java.util.Map<Integer, java.util.List<GameObject>> loadedChunks =
+            new java.util.HashMap<>();
+
 
     private static final int FRUIT_LAYER = Layer.FOREGROUND + 1;
     private static final int SKY_LAYER = -250;
@@ -169,5 +180,23 @@ public class PepseGameManager extends GameManager {
 
     private void initializeSky(WindowController windowController) {
         gameObjects().addGameObject(Sky.create(windowController.getWindowDimensions()), SKY_LAYER);
+    }
+
+    private static int floorDiv(int x, int y) {
+        int r = x / y;
+        if ((x ^ y) < 0 && (r * y != x)) r--;
+        return r;
+    }
+
+    private int worldXToChunk(float worldX) {
+        return floorDiv((int)Math.floor(worldX), CHUNK_WIDTH);
+    }
+
+    private int chunkMinX(int chunkIdx) {
+        return chunkIdx * CHUNK_WIDTH;
+    }
+
+    private int chunkMaxX(int chunkIdx) {
+        return chunkMinX(chunkIdx) + CHUNK_WIDTH;
     }
 }
