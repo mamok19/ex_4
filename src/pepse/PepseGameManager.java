@@ -35,12 +35,8 @@ import static pepse.Constants.BLOCK_SIZE;
  */
 public class PepseGameManager extends GameManager {
 
-    private static final int CHUNK_BLOCKS = 40;
-    private static final int CHUNK_WIDTH = CHUNK_BLOCKS * BLOCK_SIZE;
-    private static final int CHUNK_RADIUS = 2;
 
-    // Loaded chunks only: chunkIndex -> objects currently in the world (so we can remove them)
-    private final java.util.Map<Integer, java.util.List<GameObject>> loadedChunks =
+    private final java.util.Map<Integer, java.util.List<ObjInLayer>> loadedZones =
             new java.util.HashMap<>();
 
 
@@ -53,6 +49,10 @@ public class PepseGameManager extends GameManager {
     private static final float FIRST_X_POSITION = 0f;
     private float groundHeightAtX0;
     private Avatar avatar; // todo check if it is ok that i hold the avatar object here
+    private Terrain terrain;
+    private Flora flora;
+    private float zoneWidth;
+    private int currentZoneIdx;
 
     /**
      * Initializes the game by setting up the sky and terrain.
@@ -69,6 +69,14 @@ public class PepseGameManager extends GameManager {
         gameObjects().layers().shouldLayersCollide(Layer.FOREGROUND,Layer.STATIC_OBJECTS,true);
         gameObjects().layers().shouldLayersCollide(Layer.FOREGROUND,FRUIT_LAYER,true);
         initializeSky(windowController);
+
+        // terrain and flora objects
+        terrain = new Terrain(windowController.getWindowDimensions(), SEED);
+        flora = new Flora(SEED, terrain::groundHeightAt);
+
+        // sliding-window width: keep it simple, same as your friend's approach
+        zoneWidth = windowController.getWindowDimensions().x();
+
         initializeTerrain(windowController);
         this.groundHeightAtX0 = Terrain.groundHeightAtX0(windowController.getWindowDimensions());
         initializeNight(windowController);
@@ -106,10 +114,15 @@ public class PepseGameManager extends GameManager {
 //        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
         // end of testing
     }
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        System.out.println("zone=" + worldXToZone(avatar.getCenter().x()));
+    }
 
     private void initializeTrees(WindowController windowController) {
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
-        Flora flora = new Flora(SEED, terrain::groundHeightAt);
+//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
+//        Flora flora = new Flora(SEED, terrain::groundHeightAt);
         List<Tree> trees = flora.createInRange(0, (int) windowController.getWindowDimensions().x()); //todo change range
         for (Tree tree : trees) {
             List<Block> trunkBlocks = tree.getTrunkBlocks();
@@ -164,9 +177,9 @@ public class PepseGameManager extends GameManager {
     }
 
     private void initializeTerrain(WindowController windowController) {
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
+//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
         for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) { //todo change range
-            if (block.getTag() == TOP_LAYER_TAG) {
+            if (block.getTag().equals(TOP_LAYER_TAG) ) {
                 gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
                 continue;
             }
@@ -182,21 +195,25 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(Sky.create(windowController.getWindowDimensions()), SKY_LAYER);
     }
 
-    private static int floorDiv(int x, int y) {
-        int r = x / y;
-        if ((x ^ y) < 0 && (r * y != x)) r--;
-        return r;
+    private int worldXToZone(float worldX) {
+        // zone index for sliding windows of width zoneWidth
+        return (int) Math.floor(worldX / zoneWidth);
     }
 
-    private int worldXToChunk(float worldX) {
-        return floorDiv((int)Math.floor(worldX), CHUNK_WIDTH);
+    private int zoneStartX(int zoneIdx) {
+        return (int) (zoneIdx * zoneWidth);
     }
 
-    private int chunkMinX(int chunkIdx) {
-        return chunkIdx * CHUNK_WIDTH;
+    private int zoneEndX(int zoneIdx) {
+        return (int) ((zoneIdx + 1) * zoneWidth);
     }
 
-    private int chunkMaxX(int chunkIdx) {
-        return chunkMinX(chunkIdx) + CHUNK_WIDTH;
-    }
+    private static class ObjInLayer {
+        final GameObject obj;
+        final int layer;
+        ObjInLayer(GameObject obj, int layer) {
+            this.obj = obj;
+            this.layer = layer;
+        }
+    } // todo we use this helper class to track both object and its layer so it will be easier to remove them later write this in the README and it is also in the map
 }
