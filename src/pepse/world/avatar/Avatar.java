@@ -87,12 +87,11 @@ public class Avatar extends GameObject {
         super.update(deltaTime);
         handleMovement();
         updateState();
-
     }
 
     private void handleMovement() {
-        boolean did_I_moved = left_right_movment_handler();
-        jump_movment_handler();
+        boolean did_I_moved = left_right_movement_handler();
+        jump_movement_handler();
         if (onGround && !did_I_moved && energyMeter < MAX_ENERGY) {
             energyReturn += ENERGY_RETURN_RATE;
             if (energyReturn >= 1f) {
@@ -134,7 +133,7 @@ public class Avatar extends GameObject {
         }
     }
 
-    private void jump_movment_handler() {
+    private void jump_movement_handler() {
         boolean spacePressed = inputListener.isKeyPressed(KeyEvent.VK_SPACE);
 
         if (spacePressed && !spaceWasPressed) {
@@ -155,7 +154,7 @@ public class Avatar extends GameObject {
         spaceWasPressed = spacePressed;
     }
 
-    private boolean left_right_movment_handler() {
+    private boolean left_right_movement_handler() {
         float velocityX = 0;
 
         if (inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
@@ -201,6 +200,10 @@ public class Avatar extends GameObject {
 
     public int getEnergyMeter() {
         return energyMeter;
+    }
+
+    public void addEnergy(int energyToAdd) {
+        this.energyMeter = Math.min(this.energyMeter + energyToAdd, MAX_ENERGY);
     }
 
 }

@@ -63,10 +63,43 @@ public class PepseGameManager extends GameManager {
         initializeNight(windowController);
         initializeSun(windowController);
         initializeMoon(windowController);
+
+
+
+        initializeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader,
+                windowController);
+        initializeEnergyDisplay(windowController);
+        initializeTrees(windowController);
+
         //testing - will be removed
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 73);
-        Flora flora = new Flora(73, terrain::groundHeightAt);
-        List<Tree> trees = flora.createInRange(0, 1200);
+//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 73);
+//        Flora flora = new Flora(73, terrain::groundHeightAt);
+//        List<Tree> trees = flora.createInRange(0, 1200);
+//        for (Tree tree : trees) {
+//            List<Block> trunkBlocks = tree.getTrunkBlocks();
+//            for (Block block : trunkBlocks) {
+//                gameObjects().addGameObject(block, Layer.FOREGROUND + 1);
+//            }
+//            List<Leaf> leaves = tree.getAllLeaves();
+//            for (Leaf l : leaves) {
+//                gameObjects().addGameObject(l, Layer.FOREGROUND);
+//            }
+//            List<Fruit> fruits = tree.getAllFruit();
+//            for (Fruit f : fruits) {
+//                gameObjects().addGameObject(f, FRUIT_LAYER);
+//            }
+//
+//        }
+//        Tree tree = new Tree(new Vector2(150,
+//                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
+//        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
+        // end of testing
+    }
+
+    private void initializeTrees(WindowController windowController) {
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
+        Flora flora = new Flora(SEED, terrain::groundHeightAt);
+        List<Tree> trees = flora.createInRange(0, (int) windowController.getWindowDimensions().x()); //todo change range
         for (Tree tree : trees) {
             List<Block> trunkBlocks = tree.getTrunkBlocks();
             for (Block block : trunkBlocks) {
@@ -82,16 +115,6 @@ public class PepseGameManager extends GameManager {
             }
 
         }
-
-//        Tree tree = new Tree(new Vector2(150,
-//                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
-//        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
-        // end of testing
-
-        initializeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader,
-                windowController);
-        initializeEnergyDisplay(windowController);
-
     }
 
     private void initializeEnergyDisplay(WindowController windowController) {

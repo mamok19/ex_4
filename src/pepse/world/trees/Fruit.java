@@ -9,12 +9,16 @@ import danogl.util.Vector2;
 import pepse.Constants;
 import pepse.utils.ColorSupplier;
 import pepse.world.Block;
+import pepse.world.avatar.Avatar;
+
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Fruit extends Block {
 
     private static final Renderable FRUIT_RENDERABLE =
             new OvalRenderable(ColorSupplier.approximateColor(Color.ORANGE));
+    private static final int FRUIT_ENERGY = 10;
     private boolean isCollected = false;
 
     public Fruit(Vector2 TopLeftCorner)
@@ -32,6 +36,7 @@ public class Fruit extends Block {
     public void onCollisionEnter(GameObject other, Collision collision) {
         if (other.getTag().equals(Constants.AVATAR_TAG) && !isCollected) {
             isCollected = true;
+            ((Avatar) other).addEnergy(FRUIT_ENERGY);
             renderer().setRenderable(null);
             this.setDimensions(Vector2.ZERO);
 
@@ -39,7 +44,6 @@ public class Fruit extends Block {
                     Constants.CYCLE_LENGTH,
                     false,
                     this::reappear);
-            //todo add 10 points of energy to avatar
         }
     }
 
