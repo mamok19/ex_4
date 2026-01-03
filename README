@@ -45,6 +45,26 @@ encapsulated within the fruit Class.
 This design maintains a clear separation of responsibilities: Flora manages placement,
 Tree manages structure, and Leaf and Fruit manage local behavior and interaction.
 
+3.
+Beyond the basic requirements of the exercise, we added several classes and design mechanisms in order to support
+an infinite world, trees management, and richer environmental behavior.
+Infinite World and Zone Management
+To support an infinite scrolling world, we extended PepseGameManager with a zone-based loading system.
+The world is divided into horizontal zones, each with a width equal to the window width.
+At any time, only the current zone of the avatar and its immediate neighbors are loaded.
+We added:
+A map loadedZones that stores all currently loaded objects per zone.
+A helper inner class ObjInLayer, which keeps track of both a GameObject and the layer it was added to.
+This design allows safe and efficient unloading of zones when the avatar moves,without losing layer information
+or requiring global searches. Zones are loaded and unloaded dynamically in the update, based on the avatar’s position.
+
+Moon Class
+The moon is implemented in the daynight package and appears only during the night cycle.
+It moves in a circular orbit using Transition components.
+The moon is created to rise when the sunsets creating a clear visual distinction between night and day.
+It it implemented like the sun class.
+
+This behavior complements the sun and night overlay and contributes to a consistent and dynamic day–night cycle.
 
 Might need to explain here:
 fruit - handles its own collectable behavior by temporarily rendering null and changing its dimensions to
