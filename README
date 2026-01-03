@@ -65,3 +65,4 @@ The moon is created to rise when the sunsets creating a clear visual distinction
 It it implemented like the sun class.
 
 we did not change the api of the given classes
+we added a constants class to hold the constant values used in the game acrissoss multiple classes
