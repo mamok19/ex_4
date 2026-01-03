@@ -23,7 +23,7 @@ public class Tree {
     private static final int MIN_TREE_HEIGHT = 4;
     private static final int MAX_TREE_HEIGHT_ADDITION = 4;
     private static final int TREE_WIDTH = 1;
-    public static final Color BASE_TRUNK_COLOR = new Color(139, 69, 19);
+    private static final Color BASE_TRUNK_COLOR = new Color(139, 69, 19);
     private static final Renderable TRUNK_RENDERABLE =
             new RectangleRenderable(ColorSupplier.approximateColor(BASE_TRUNK_COLOR));
     private static final int TREE_TOP_RADIUS = 3;
@@ -49,6 +49,9 @@ public class Tree {
         createWindEffectForLeaves();
     }
 
+    /**
+     * creates wind effect for all leaves on the tree
+     */
     private void createWindEffectForLeaves() {
         for (Leaf leaf : allLeaves) {
             float timeToStart = random.nextFloat() * Constants.WIND_EFFECT_DIFFERENCES;
@@ -56,6 +59,10 @@ public class Tree {
         }
     }
 
+    /**
+     * creates the trunk of the tree using blocks
+     * @param bottomLeftCorner the bottom left corner where the tree trunk should start
+     */
     private void createTreeTrunk(Vector2 bottomLeftCorner) {
         for (int i = 0; i < this.trunkHeight; i++) {//check whether i should start at 0 or 1
             for (int j = 0; j < TREE_WIDTH; j++) {
@@ -76,6 +83,9 @@ public class Tree {
         return TrunkBlocks;
     }
 
+    /**
+     * creates the top part of the tree with leaves and fruit
+     */
     private void createTreeTop(){
         Vector2 treeTopCenter = new Vector2(
                 TrunkBlocks.getFirst().getTopLeftCorner().x() + Block.getSize(),
@@ -113,6 +123,7 @@ public class Tree {
      * @return list of all leaves on the tree
      */
     public List<Leaf> getAllLeaves() {
+
         return allLeaves;
     }
 
@@ -121,6 +132,7 @@ public class Tree {
      * @return list of all fruit on the tree
      */
     public List<Fruit> getAllFruit() {
+
         return allFruit;
     }
 }
