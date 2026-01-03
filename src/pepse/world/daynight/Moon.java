@@ -8,7 +8,10 @@ import danogl.util.Vector2;
 import pepse.world.Terrain;
 
 import java.awt.*;
-
+/**
+ * Handles the creation and movement of the moon in the game world.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Moon {
     private static final int MID_SCREEN_FACTOR = 2;
     private static final Vector2 MOON_SIZE = new Vector2(64, 64);
@@ -16,6 +19,13 @@ public class Moon {
     private static final float START_CYCLE = -90f;
     private static final float END_CYCLE = 270f;
 
+    /**
+     * Creates a moon GameObject that moves in a circular path to simulate the night cycle.
+     *
+     * @param windowDimensions The dimensions of the game window
+     * @param cycleLength      The duration of a full moon cycle (day-night cycle)
+     * @return A GameObject representing the moon
+     */
     public static GameObject create(Vector2 windowDimensions, float cycleLength){
         Vector2 moonPosition = new Vector2(windowDimensions.x() / MID_SCREEN_FACTOR,
                 (windowDimensions.y() * Terrain.getGroundHeightFactor()) / MID_SCREEN_FACTOR);

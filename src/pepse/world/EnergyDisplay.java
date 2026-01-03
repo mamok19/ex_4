@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 /**
  * The energy display of the game.
  * Displays the player's remaining energy as text on the screen.
+ * @author Eilam Soroka, Maayan Felig
  */
 public class EnergyDisplay {
 

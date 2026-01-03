@@ -1,7 +1,10 @@
 package pepse;
 
 import java.awt.*;
-
+/**
+ * A class containing constants used throughout the game.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Constants {
     //Game
     public static final float CYCLE_LENGTH = 30.0f;

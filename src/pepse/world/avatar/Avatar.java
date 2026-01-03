@@ -12,7 +12,11 @@ import java.awt.event.KeyEvent;
 
 import static pepse.Constants.*;
 
-
+/**
+ * Represents the Avatar character in the game. The avatar can move left, right, and jump,
+ * while consuming energy. The avatar's energy can also be replenished by picking up fruits.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Avatar extends GameObject {
 
     private static final Vector2 AVATAR_SIZE = new Vector2(50, 50);
@@ -56,6 +60,14 @@ public class Avatar extends GameObject {
     private boolean spaceWasPressed = false;
 
 
+    /**
+     * Constructs an Avatar object with the specified starting position, input listener,
+     * and image reader.
+     *
+     * @param topLeftCorner The top-left corner position of the avatar.
+     * @param inputListener The input listener used to handle user inputs.
+     * @param imageReader   The image reader used to read image files for the avatar's animations.
+     */
     public Avatar(Vector2 topLeftCorner,
                   UserInputListener inputListener,
                   ImageReader imageReader){
@@ -82,6 +94,11 @@ public class Avatar extends GameObject {
         setTag(Constants.AVATAR_TAG);
     }
 
+    /**
+     * Updates the avatar state based on the delta time, including movement and energy consumption.
+     *
+     * @param deltaTime The time delta since the last update.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -185,6 +202,12 @@ public class Avatar extends GameObject {
     }
 
 
+    /**
+     *  * Handles collision events when the avatar collides with another game object.
+     *
+     * @param other     The other game object involved in the collision.
+     * @param collision The collision information.
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
@@ -195,15 +218,23 @@ public class Avatar extends GameObject {
             doubleJumpUsed = false;
             transform().setVelocityY(0);
         }
-//        if (other.getTag() == FRUIT_TAG) {
-//            energyMeter = Math.min(energyMeter + FRUIT_ENERGY_VALUE, MAX_ENERGY);
-//        }
 
     }
+
+    /**
+     * Adds energy to the avatar's energy meter, up to the maximum limit.
+     *
+     * @param energyToAdd The amount of energy to add.
+     */
     public void addEnergy(int energyToAdd) {
         this.energyMeter = Math.min(this.energyMeter + energyToAdd, MAX_ENERGY);
     }
 
+    /**
+     * Returns the current energy level of the avatar.
+     *
+     * @return The current energy level.
+     */
     public int getEnergyMeter() {
         return energyMeter;
     }

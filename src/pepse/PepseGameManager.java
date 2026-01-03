@@ -70,15 +70,8 @@ public class PepseGameManager extends GameManager {
         gameObjects().layers().shouldLayersCollide(Layer.FOREGROUND,FRUIT_LAYER,true);
         initializeSky(windowController);
 
-        // terrain and flora objects
         terrain = new Terrain(windowController.getWindowDimensions(), SEED);
         flora = new Flora(SEED, terrain::groundHeightAt);
-
-
-
-
-
-//        initializeTerrain(windowController);
         this.groundHeightAtX0 = Terrain.groundHeightAtX0(windowController.getWindowDimensions());
         initializeNight(windowController);
         initializeSun(windowController);
@@ -89,38 +82,19 @@ public class PepseGameManager extends GameManager {
         initializeAvatar(new Vector2(FIRST_X_POSITION,groundHeightAtX0),inputListener, imageReader,
                 windowController);
         initializeEnergyDisplay(windowController);
-//        initializeTrees(windowController);
-        // sliding-window width: keep it simple, same as your friend's approach
+
         zoneWidth = windowController.getWindowDimensions().x();
         currentZoneIdx = worldXToZone(avatar.getCenter().x());
         loadZone(currentZoneIdx - 1);
         loadZone(currentZoneIdx);
         loadZone(currentZoneIdx + 1);
-
-        //testing - will be removed
-//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 73);
-//        Flora flora = new Flora(73, terrain::groundHeightAt);
-//        List<Tree> trees = flora.createInRange(0, 1200);
-//        for (Tree tree : trees) {
-//            List<Block> trunkBlocks = tree.getTrunkBlocks();
-//            for (Block block : trunkBlocks) {
-//                gameObjects().addGameObject(block, Layer.FOREGROUND + 1);
-//            }
-//            List<Leaf> leaves = tree.getAllLeaves();
-//            for (Leaf l : leaves) {
-//                gameObjects().addGameObject(l, Layer.FOREGROUND);
-//            }
-//            List<Fruit> fruits = tree.getAllFruit();
-//            for (Fruit f : fruits) {
-//                gameObjects().addGameObject(f, FRUIT_LAYER);
-//            }
-//
-//        }
-//        Tree tree = new Tree(new Vector2(150,
-//                Terrain.groundHeightAtX0(windowController.getWindowDimensions())-30),73);
-//        gameObjects().addGameObject(tree, Layer.FOREGROUND + 1);
-        // end of testing
     }
+
+    /**
+     * Updates the game state, loading and unloading zones as the avatar moves.
+     *
+     * @param deltaTime Time elapsed since the last update.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -152,7 +126,6 @@ public class PepseGameManager extends GameManager {
 
         java.util.List<ObjInLayer> created = new java.util.ArrayList<>();
 
-        // 1) Terrain
         for (Block block : terrain.createInRange(start, end)) {
             int layer = TOP_LAYER_TAG.equals(block.getTag())
                     ? Layer.STATIC_OBJECTS
@@ -161,8 +134,6 @@ public class PepseGameManager extends GameManager {
             created.add(new ObjInLayer(block, layer));
         }
 
-        // 2) Trees + leaves + fruits
-        // This assumes your Flora.createInRange is deterministic for a given SEED and x-range.
         List<Tree> trees = flora.createInRange(start, end);
         for (Tree tree : trees) {
             for (Block trunk : tree.getTrunkBlocks()) {
@@ -181,10 +152,7 @@ public class PepseGameManager extends GameManager {
                 created.add(new ObjInLayer(fruit, layer));
             }
 
-            // If swayLeaves() schedules tasks/transitions, it is fine as long as leaves are removed later.
-//            tree.swayLeaves();
         }
-
         loadedZones.put(zoneIdx, created);
     }
 
@@ -200,8 +168,6 @@ public class PepseGameManager extends GameManager {
 
 
     private void initializeTrees(WindowController windowController) {
-//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
-//        Flora flora = new Flora(SEED, terrain::groundHeightAt);
         List<Tree> trees = flora.createInRange(0, (int) windowController.getWindowDimensions().x()); //todo change range
         for (Tree tree : trees) {
             List<Block> trunkBlocks = tree.getTrunkBlocks();
@@ -257,7 +223,6 @@ public class PepseGameManager extends GameManager {
     }
 
     private void initializeTerrain(WindowController windowController) {
-//        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
         for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) { //todo change range
             if (block.getTag().equals(TOP_LAYER_TAG) ) {
                 gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
@@ -267,6 +232,11 @@ public class PepseGameManager extends GameManager {
         }
     }
 
+    /**
+     * The main method to run the Pepse game.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new PepseGameManager().run();
     }
@@ -287,6 +257,10 @@ public class PepseGameManager extends GameManager {
         return (int) ((zoneIdx + 1) * zoneWidth);
     }
 
+    /** A helper class to track a GameObject along with its layer.
+     * Used for managing loaded zones in the game.
+     * @author Eilam Soroka, Maayan Felig
+     */
     private static class ObjInLayer {
         final GameObject obj;
         final int layer;

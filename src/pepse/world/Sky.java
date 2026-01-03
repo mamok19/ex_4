@@ -13,6 +13,11 @@ import java.awt.*;
  */
 public class Sky {
 
+    /**
+     * Creates a sky GameObject.
+     * @param windowDimensions The dimensions of the window.
+     * @return The sky GameObject.
+     */
     public static GameObject create(Vector2 windowDimensions){
         GameObject sky =new GameObject(
                 Vector2.ZERO,

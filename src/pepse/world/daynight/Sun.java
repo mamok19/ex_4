@@ -9,7 +9,10 @@ import danogl.util.Vector2;
 import pepse.world.Terrain;
 
 import java.awt.*;
-
+/**
+ * Handles the creation and movement of the sun in the game world.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Sun {
     private static final int MID_SCREEN_FACTOR = 2;
     private static final Vector2 SUN_SIZE = new Vector2(64, 64);
@@ -17,6 +20,13 @@ public class Sun {
     private static final float START_CYCLE = 90f;
     private static final float END_CYCLE = 450f;
 
+    /**
+     * Creates a sun GameObject that moves in a circular path to simulate day and night.
+     *
+     * @param windowDimensions The dimensions of the game window
+     * @param cycleLength      The duration of a full sun cycle (day-night cycle)
+     * @return A GameObject representing the sun
+     */
     public static GameObject create(Vector2 windowDimensions, float cycleLength){
         Vector2 sunPosition = new Vector2(windowDimensions.x() / MID_SCREEN_FACTOR,
                   (windowDimensions.y() * Terrain.getGroundHeightFactor()) / MID_SCREEN_FACTOR);

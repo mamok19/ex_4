@@ -8,7 +8,11 @@ import danogl.util.Vector2;
 import pepse.Constants;
 
 import static pepse.Constants.BLOCK_SIZE;
-
+/**
+ * A block GameObject.
+ * Blocks are basic GameObjects that other GameObjects can be constructed from.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Block extends GameObject {
 
 

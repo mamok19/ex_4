@@ -6,12 +6,21 @@ import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
 
 import java.awt.*;
-
+/**
+ * Creates a halo around the sun to simulate its glowing effect.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class SunHalo {
     private static final Vector2 SUN_HALO_SIZE = new  Vector2(128, 128);
     private static final String SUN_HALO_TAG = "sunHalo";
     private static final Color SUN_HALO_COLOR = new Color(255, 255, 0, 20);
 
+    /**
+     * Creates the sun's halo object that follows the sun's position.
+     *
+     * @param sun The sun GameObject that the halo should follow
+     * @return A GameObject representing the sun's halo
+     */
     public static GameObject create(GameObject sun){
         GameObject sunHalo = new GameObject(sun.getTopLeftCorner(), SUN_HALO_SIZE,
                 new OvalRenderable(SUN_HALO_COLOR));

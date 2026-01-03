@@ -21,6 +21,11 @@ public class Terrain {
     private final int seed;
     private final NoiseGenerator noiseGenerator;
 
+    /**
+     * Constructs a Terrain object.
+     * @param windowDimensions The dimensions of the game window.
+     * @param seed The seed for the noise generator to ensure consistent terrain generation.
+     */
     public Terrain(Vector2 windowDimensions, int seed){
         this.windowDimensions = windowDimensions;
         this.seed = seed;
@@ -34,10 +39,14 @@ public class Terrain {
         return (GROUND_HEIGHT_FACTOR * windowDimensions.y() )+ noise;
     }
 
+    /**
+     * Creates terrain blocks within the specified x-coordinate range.
+     * @param minX The minimum x-coordinate of the range.
+     * @param maxX The maximum x-coordinate of the range.
+     * @return A list of terrain blocks within the specified range.
+     */
     public List<Block> createInRange(int minX, int maxX) {
-        
-        Block block = new Block(Vector2.ZERO,
-                new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
+
         ArrayList<Block> blocks = new ArrayList<>();
         for (int x = minX; x <= maxX; x += BLOCK_SIZE) {
             float groundHeight = groundHeightAt(x);
@@ -56,13 +65,25 @@ public class Terrain {
         return blocks;
     }
 
+    /**
+     * Static method to get the ground height at x=0 based on window dimensions.
+     * @param windowDimensions The dimensions of the game window.
+     * @return The ground height at x=0.
+     */
     public static float groundHeightAtX0(Vector2 windowDimensions) {
         return GROUND_HEIGHT_FACTOR * windowDimensions.y();
     }
 
+    /** Getter for GROUND_HEIGHT_FACTOR
+     * @return GROUND_HEIGHT_FACTOR
+     * */
     public static float getGroundHeightFactor() {
         return GROUND_HEIGHT_FACTOR;
     }
+    /**
+     * Getter for TERRAIN_DEPTH
+     * @return TERRAIN_DEPTH
+     * */
     public static float getDepth() {
         return TERRAIN_DEPTH;
     }
