@@ -29,11 +29,13 @@ public class Terrain {
     public Terrain(Vector2 windowDimensions, int seed){
         this.windowDimensions = windowDimensions;
         this.seed = seed;
-        //Random rand = new Random(Objects.hash(START_x0, seed));
-        //this.groundHeightAtX0 = rand.nextInt((int)(windowDimensions.y()*(2/3.0)), (int)(windowDimensions.y()*(5/6.0)));
-//        this.groundHeightAtX0 = (2/3.0f) * windowDimensions.y();
         this.noiseGenerator = new NoiseGenerator(seed, (int)(GROUND_HEIGHT_FACTOR * windowDimensions.y()));
     }
+    /**
+     * Calculates the ground height at a given x-coordinate using the noise generator.
+     * @param x The x-coordinate.
+     * @return The ground height at the specified x-coordinate.
+     */
     public float groundHeightAt(float x){
         float noise = (float) noiseGenerator.noise(x,NOISE_FACTOR_TERRAIN);
         return (GROUND_HEIGHT_FACTOR * windowDimensions.y() )+ noise;

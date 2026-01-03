@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.UnaryOperator;
-
+/**
+ * A class responsible for creating flora (trees) in the game world.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Flora {
 
     private static final int MIN_SPACE_BETWEEN_TREES = 150;
@@ -16,11 +19,22 @@ public class Flora {
     private final int seed;
     private final UnaryOperator<Float> groundHeightAt;
 
+    /**
+     * Constructs a Flora object.
+     * @param seed The seed for random number generation to ensure consistent tree placement.
+     * @param groundHeightAt A function that provides the ground height at a given x-coordinate.
+     */
     public Flora(int seed, UnaryOperator<Float> groundHeightAt) {
         this.seed = seed;
         this.groundHeightAt = groundHeightAt;
     }
 
+    /**
+     * Creates trees within the specified x-coordinate range.
+     * @param minX The minimum x-coordinate of the range.
+     * @param maxX The maximum x-coordinate of the range.
+     * @return A list of trees within the specified range.
+     */
     public List<Tree> createInRange(int minX, int maxX) {
         ArrayList<Tree> trees = new ArrayList<>();
         for (int i = minX; i <= maxX; i += MIN_SPACE_BETWEEN_TREES) {

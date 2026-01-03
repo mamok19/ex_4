@@ -69,7 +69,8 @@ public class Avatar extends GameObject {
                   UserInputListener inputListener,
                   ImageReader imageReader){
         super(new Vector2(topLeftCorner.x(),
-                topLeftCorner.y() - AVATAR_SIZE.y() - OFFSET_GROUND_START) , AVATAR_SIZE, imageReader.readImage("assets/idle_0.png", true));
+                topLeftCorner.y() - AVATAR_SIZE.y() - OFFSET_GROUND_START) , AVATAR_SIZE,
+                imageReader.readImage("assets/idle_0.png", true));
 //        this.topleftCorner = topLeftCorner;
         this.inputListener = inputListener;
         this.imageReader = imageReader;

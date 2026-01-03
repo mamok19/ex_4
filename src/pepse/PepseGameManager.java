@@ -49,7 +49,7 @@ public class PepseGameManager extends GameManager {
     private static final int SUN_LAYER = -225;
     private static final float FIRST_X_POSITION = 0f;
     private float groundHeightAtX0;
-    private Avatar avatar; // todo check if it is ok that i hold the avatar object here
+    private Avatar avatar;
     private Terrain terrain;
     private Flora flora;
     private float zoneWidth;
@@ -64,7 +64,8 @@ public class PepseGameManager extends GameManager {
      * @param windowController Controls the game window.
      */
     @Override
-    public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener,
+    public void initializeGame(ImageReader imageReader, SoundReader soundReader,
+                               UserInputListener inputListener,
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         gameObjects().layers().shouldLayersCollide(Layer.FOREGROUND,Layer.STATIC_OBJECTS,true);
@@ -169,7 +170,7 @@ public class PepseGameManager extends GameManager {
 
 
     private void initializeTrees(WindowController windowController) {
-        List<Tree> trees = flora.createInRange(0, (int) windowController.getWindowDimensions().x()); //todo change range
+        List<Tree> trees = flora.createInRange(0, (int) windowController.getWindowDimensions().x());
         for (Tree tree : trees) {
             List<Block> trunkBlocks = tree.getTrunkBlocks();
             for (Block block : trunkBlocks) {
@@ -224,7 +225,7 @@ public class PepseGameManager extends GameManager {
     }
 
     private void initializeTerrain(WindowController windowController) {
-        for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) { //todo change range
+        for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) {
             if (block.getTag().equals(TOP_LAYER_TAG) ) {
                 gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
                 continue;

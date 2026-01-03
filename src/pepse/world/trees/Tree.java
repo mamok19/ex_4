@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * A class representing a Tree in the game world.
+ * The Tree consists of a trunk made of blocks, leaves, and fruit.
+ * @author Eilam Soroka, Maayan Felig
+ */
 public class Tree {
 
     private static final int MIN_TREE_HEIGHT = 4;

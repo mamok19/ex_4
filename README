@@ -6,16 +6,18 @@ the Avatar class, located in the pepse.world.avatar package.
 The class extends GameObject, which allows the avatar to naturally use the engine’s
 abilities for rendering, updating, and collision handling.
 
-The avatar is created and managed by PepseGameManager, other game objects interact with it only through collisions
-This keeps responsibilities well separated and avoids unnecessary coupling between classes.
+The avatar is created and managed by PepseGameManager, other game objects interact with it only through
+collisions This keeps responsibilities well separated and avoids unnecessary coupling between classes.
 State:
 The avatar uses a simple internal state Enum with three states: IDLE, WALKING, and JUMPING.
 The current state is updated every frame based on whether the avatar is on the ground and its
 current horizontal velocity. When the state changes, the displayed animation is updated accordingly
 This design cleanly separates movement logic from animation logic.
 Energy System:
-The avatar maintains an internal energy meter as a private variable that indicates if its able tok move or jump.
-Horizontal movement on the ground and jumping consume energy, while standing still on the ground gradually regenerates.
+The avatar maintains an internal energy meter as a private variable that indicates
+if its able to move or jump.
+Horizontal movement on the ground and jumping consume energy, while standing still on the ground
+gradually regenerates.
 Energy can also be restored by collecting fruits. In this collision,
 the fruit object handles the collision and calls a public method on the avatar to add energy,
 keeping the energy logic encapsulated within the avatar.
@@ -28,26 +30,33 @@ preserving encapsulation and making the design more modular.
 The pepse.world.trees package is responsible for generating and managing all Tree objects in the game.
 It includes the classes Flora, Tree, Leaf, and Fruit, each handling a different level of responsibility.
 The Flora class controls the distribution of trees across the terrain.
-It receives a random seed and a function for calculating ground height, and uses them to create trees at fixed
-intervals in a deterministic way. Flora does not create game objects directly, instead returns a list of Tree objects.
+It receives a random seed and a function for calculating ground height, and uses them to create trees at
+fixed intervals in a deterministic way. Flora does not create game objects directly, instead returns a list
+ of Tree objects.
 The Tree class represents a single tree and is responsible for creating its trunk, leaves, and fruits.
 It uses randomization (based on a seed) to determine the tree height and the composition of the tree top.
 The class stores all generated trunk blocks, leaves, and fruits and exposes them through getters,
-allowing the game manager to add them to the world. The tree is also responsible for triggering the wind effect.
-The Leaf class extends Block and represents an individual leaf. Each leaf is responsible only for its own animation.
-Wind movement is implemented using ScheduledTask and Transition to periodically change the leaf’s rotation and
-dimensions, creating a natural effect.
-The Fruit class represents a collectible object. It handles its own collectable behavior by detecting collisions
-with the avatar. When collected, the fruit temporarily disappears by setting its renderable to null and changing
-its dimensions to Vector2.ZERO. After a full day–night cycle, it reappears automatically using a ScheduledTask.
-The fruit is also responsible for adding energy to the avatar upon collection, keeping all collection logic
-encapsulated within the fruit Class.
+allowing the game manager to add them to the world.
+ The tree is also responsible for triggering the wind effect.
+The Leaf class extends Block and represents an individual leaf.
+ Each leaf is responsible only for its own
+animation.
+Wind movement is implemented using ScheduledTask and Transition to periodically
+change the leaf’s rotation and dimensions, creating a natural effect.
+The Fruit class represents a collectible object.
+It handles its own collectable behavior by detecting collisions
+with the avatar. When collected, the fruit temporarily disappears
+by setting its renderable to null and changing
+its dimensions to Vector2.ZERO. After a full day–night cycle,
+it reappears automatically using a ScheduledTask.
+The fruit is also responsible for adding energy to the avatar upon collection,
+keeping all collection logic encapsulated within the fruit Class.
 This design maintains a clear separation of responsibilities: Flora manages placement,
 Tree manages structure, and Leaf and Fruit manage local behavior and interaction.
 
 3.
-Beyond the basic requirements of the exercise, we added several classes and design mechanisms in order to support
-an infinite world, trees management, and richer environmental behavior.
+Beyond the basic requirements of the exercise, we added several classes and design mechanisms in order
+to support an infinite world, trees management, and richer environmental behavior.
 Infinite World and Zone Management
 To support an infinite scrolling world, we extended PepseGameManager with a zone-based loading system.
 The world is divided into horizontal zones, each with a width equal to the window width.
@@ -55,8 +64,9 @@ At any time, only the current zone of the avatar and its immediate neighbors are
 We added:
 A map loadedZones that stores all currently loaded objects per zone.
 A helper inner class ObjInLayer, which keeps track of both a GameObject and the layer it was added to.
-This design allows safe and efficient unloading of zones when the avatar moves,without losing layer information
-or requiring global searches. Zones are loaded and unloaded dynamically in the update, based on the avatar’s position.
+This design allows safe and efficient unloading of zones
+when the avatar moves,without losing layer information or requiring global searches.
+ Zones are loaded and unloaded dynamically in the update, based on the avatar’s position.
 
 Moon Class
 The moon is implemented in the daynight package and appears only during the night cycle.
