@@ -27,7 +27,6 @@ public class Avatar extends GameObject {
     private static final int LEFT_RIGHT_MOVEMENT_COST = 2;
     private static final int JUMP_COST = 20;
     private static final int DOUBLE_JUMP_COST = 50;
-    private static final float ENERGY_RETURN_RATE = 1f; //todo write on readme that i change movement cost
     private static final int ENERGY_RETURN_AMOUNT = 1;
     private static final int FRUIT_ENERGY_VALUE = 10;
     private static final String[] IDLE_IMAGES = new String[]
@@ -39,7 +38,7 @@ public class Avatar extends GameObject {
     private static final double TIME_BETWEEN_ANIMATION_FRAMES = 0.2f;
 
 
-    private static enum state {
+    private static enum State {
         IDLE,
         WALKING,
         JUMPING
@@ -47,11 +46,9 @@ public class Avatar extends GameObject {
 
     private boolean onGround;
     private boolean doubleJumpUsed;
-    private float energyReturn = 0f;
-    private final Vector2 topleftCorner;
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
-    private state currentState;
+    private State currentState;
     private AnimationRenderable idleAnimation;
     private AnimationRenderable walkAnimation;
     private AnimationRenderable jumpAnimation;
@@ -73,12 +70,12 @@ public class Avatar extends GameObject {
                   ImageReader imageReader){
         super(new Vector2(topLeftCorner.x(),
                 topLeftCorner.y() - AVATAR_SIZE.y() - OFFSET_GROUND_START) , AVATAR_SIZE, imageReader.readImage("assets/idle_0.png", true));
-        this.topleftCorner = topLeftCorner;
+//        this.topleftCorner = topLeftCorner;
         this.inputListener = inputListener;
         this.imageReader = imageReader;
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
-        this.currentState = state.IDLE;
+        this.currentState = State.IDLE;
         this.energyMeter = MAX_ENERGY;
         this.doubleJumpUsed = false;
 
@@ -110,27 +107,23 @@ public class Avatar extends GameObject {
         boolean did_I_moved = left_right_movement_handler();
         jump_movement_handler();
         if (onGround && !did_I_moved && energyMeter < MAX_ENERGY) {
-            energyReturn += ENERGY_RETURN_RATE;
-            if (energyReturn >= 1f) {
-                energyReturn = 0f;
-                energyMeter += ENERGY_RETURN_AMOUNT;
-            }
+            energyMeter = Math.min(MAX_ENERGY, energyMeter + ENERGY_RETURN_AMOUNT);
         }
     }
 
     private void updateState() {
         if (!onGround) {
-            setState(state.JUMPING);
+            setState(State.JUMPING);
         }
         else if (transform().getVelocity().x() != 0) {
-            setState(state.WALKING);
+            setState(State.WALKING);
         }
         else {
-            setState(state.IDLE);
+            setState(State.IDLE);
         }
     }
 
-    private void setState(state newState) {
+    private void setState(State newState) {
         if (newState == currentState) {
             return;
         }
@@ -161,7 +154,8 @@ public class Avatar extends GameObject {
                 onGround = false;
             }
 
-            else if (!onGround && !doubleJumpUsed && energyMeter >= DOUBLE_JUMP_COST) {
+            else if (!onGround && !doubleJumpUsed && transform().getVelocity().y() > 0 &&
+                    energyMeter >= DOUBLE_JUMP_COST) {
                 energyMeter -= DOUBLE_JUMP_COST;
                 transform().setVelocityY(-JUMP_SPEED);
                 doubleJumpUsed = true;
@@ -174,10 +168,17 @@ public class Avatar extends GameObject {
     private boolean left_right_movement_handler() {
         float velocityX = 0;
 
-        if (inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
+        boolean left = inputListener.isKeyPressed(KeyEvent.VK_LEFT);
+        boolean right = inputListener.isKeyPressed(KeyEvent.VK_RIGHT);
+
+        if (left == right) {
+            transform().setVelocityX(0);
+            return false;
+        }
+        if (left) {
             velocityX -= WALK_SPEED;
         }
-        if (inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
+        if (right) {
             velocityX += WALK_SPEED;
         }
 

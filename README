@@ -64,9 +64,4 @@ It moves in a circular orbit using Transition components.
 The moon is created to rise when the sunsets creating a clear visual distinction between night and day.
 It it implemented like the sun class.
 
-This behavior complements the sun and night overlay and contributes to a consistent and dynamic day–night cycle.
-
-Might need to explain here:
-fruit - handles its own collectable behavior by temporarily rendering null and changing its dimensions to
-Vector2.ZERO when collected, then restoring them after a game cycle duration.
-
+we did not change the api of the given classes

@@ -40,6 +40,7 @@ public class PepseGameManager extends GameManager {
             new java.util.HashMap<>();
 
 
+    private static final int AVATAR_LAYER = Layer.FOREGROUND + 2;
     private static final int FRUIT_LAYER = Layer.FOREGROUND + 1;
     private static final int SKY_LAYER = -250;
     private static final int SEED = 73;
@@ -268,5 +269,5 @@ public class PepseGameManager extends GameManager {
             this.obj = obj;
             this.layer = layer;
         }
-    } // todo we use this helper class to track both object and its layer so it will be easier to remove them later write this in the README and it is also in the map
+    }
 }
